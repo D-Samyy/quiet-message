@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un Mensaje Especial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-creme: #FFF8F2;
+            --pastel-pink: #F8D7E3;
+            --pastel-lavender: #E6DDF7;
+            --text-dark: #3A3535;
+            --text-muted: #706868;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-creme), var(--pastel-lavender), var(--pastel-pink));
+            background-size: 400% 400%;
+            animation: gradientBg 15s ease infinite;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* Animación suave del fondo de pantalla */
+        @keyframes gradientBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Contenedor Principal */
+        .container {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Pantallas / Secciones */
+        .screen {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(230, 221, 247, 0.5);
+        }
+
+        .screen.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tipografías y Textos */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .typewriter-container {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-dark);
+            min-height: 220px; /* Evita saltos de layout durante la escritura */
+            text-align: left;
+            margin-bottom: 30px;
+            white-space: pre-line; /* Mantiene los saltos de línea */
+            font-weight: 300;
+        }
+
+        /* Cursor efecto máquina de escribir */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: var(--text-muted);
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .final-message {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        /* Botones Elegantes */
+        .btn {
+            background-color: var(--white);
+            color: var(--text-dark);
+            border: 1px solid rgba(218, 201, 224, 0.6);
+            padding: 14px 36px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background-color: var(--text-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(58, 53, 53, 0.15);
+            border-color: var(--text-dark);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Botón de continuar inicialmente oculto */
+        #btn-continue {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        #btn-continue.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Firma Discreta */
+        footer {
+            position: absolute;
+            bottom: 25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            font-weight: 300;
+            opacity: 0.8;
+            z-index: 5;
+        }
+
+        /* Micro-partículas sutiles de fondo */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float Up 12s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% {
+                transform: translateY(-5vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        
+        <div class="screen active" id="screen-welcome">
+            <h1>Un espacio reservado para ti</h1>
+            <button class="btn" id="btn-access">Acceder</button>
+        </div>
+
+        <div class="screen" id="screen-message">
+            <div class="typewriter-container" id="text-target"></div>
+            <button class="btn" id="btn-continue">Continuar...</button>
+        </div>
+
+        <div class="screen" id="screen-final">
+            <p class="final-message">Gracias por llegar hasta aquí ✨</p>
+        </div>
+
+    </div>
+
+    <footer>att: Ing. Diego Samil Massih R.</footer>
+
+    <script>
+        // Configuración y lógica de la aplicación
+        const textToType = `Accediendo al sistema...
+A veces la vida pone personas
+que llegan sin avisar
+y terminan ocupando
+más pensamientos de los planeados.
+Creo que acabas de pasar por aquí.
+Sistema desbloqueado.`;
+
+        const btnAccess = document.getElementById('btn-access');
+        const btnContinue = document.getElementById('btn-continue');
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenMessage = document.getElementById('screen-message');
+        const screenFinal = document.getElementById('screen-final');
+        const textTarget = document.getElementById('text-target');
+
+        // Función para cambiar de pantalla con transición limpia
+        function changeScreen(currentScreen, nextScreen, callback) {
+            currentScreen.style.opacity = '0';
+            currentScreen.style.transform = 'translateY(-10px)';
+            
+            setTimeout(() => {
+                currentScreen.classList.remove('active');
+                nextScreen.classList.add('active');
+                
+                // Forzar reflow para que la transición de entrada funcione
+                navigator.userAgent; 
+                
+                setTimeout(() => {
+                    nextScreen.style.opacity = '1';
+                    nextScreen.style.transform = 'translateY(0)';
+                    if (callback) callback();
+                }, 50);
+            }, 600);
+        }
+
+        // Efecto Máquina de Escribir (Typewriter)
+        function runTypewriter(text, element, speed = 55) {
+            let index = 0;
+            element.innerHTML = '<span id="typed-text"></span><span class="cursor"></span>';
+            const typedTextSpan = document.getElementById('typed-text');
+
+            function type() {
+                if (index < text.length) {
+                    typedTextSpan.textContent += text.charAt(index);
+                    index++;
+                    // Ajuste dinámico de velocidad para pausas naturales en la puntuación
+                    let currentSpeed = speed;
+                    if (text.charAt(index - 1) === '.' || text.charAt(index - 1) === '\n') {
+                        currentSpeed = speed * 8; 
+                    }
+                    setTimeout(type, currentSpeed);
+                } else {
+                    // Mostrar el botón de continuar elegantemente al finalizar el texto
+                    btnContinue.classList.add('visible');
+                }
+            }
+            type();
+        }
+
+        // Generador de micro-partículas sutiles de fondo
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 12; // Cantidad baja para mantener la estética minimalista
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Propiedades aleatorias elegantes
+                const size = Math.random() * 4 + 2; // de 2px a 6px
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                
+                const delay = Math.random() * 10;
+                const duration = Math.random() * 8 + 8; // de 8s a 16s
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Eventos de interacción
+        btnAccess.addEventListener('click', () => {
+            changeScreen(screenWelcome, screenMessage, () => {
+                runTypewriter(textToType, textTarget);
+            });
+        });
+
+        btnContinue.addEventListener('click', () => {
+            changeScreen(screenMessage, screenFinal);
+        });
+
+        // Inicializar partículas al cargar
+        window.addEventListener('DOMContentLoaded', createParticles);
+    </script>
+</body>
+</html>
